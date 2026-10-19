@@ -3,10 +3,13 @@
   "private": true,
   "scripts": {
     "test": "playwright test",
-    "serve": "python3 -m http.server 4173 --bind 127.0.0.1 --directory site"
+    "serve": "node tools/serve.mjs",
+    "og": "node tools/make-og.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
-    "@playwright/test": "^1.50.0"
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/space-grotesk": "^5.3.0",
+    "@playwright/test": "1.64.1"
   }
 }

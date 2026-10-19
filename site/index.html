@@ -6,9 +6,24 @@
 <title>hey, i am dan · Dan Gutwald</title>
 <meta name="description" content="Dan Gutwald: SDET by day, homelab tinkerer by night. Also a dungeon master and factory-game addict.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%91%8B%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://heyiamdan.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://heyiamdan.com/">
+<meta property="og:title" content="hey, i am dan · Dan Gutwald">
+<meta property="og:description" content="SDET by day, homelab by night. This page tests itself with Playwright.">
+<meta property="og:image" content="https://heyiamdan.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="hey, i am dan. Dan Gutwald, Software Development Engineer in Test.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/space-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jetbrains-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+  @font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/space-grotesk-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 500; font-display: swap; src: url("fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/jetbrains-mono-latin-600-normal.woff2") format("woff2"); }
   :root {
     --bg: #0d1117;
     --panel: #151b23;
@@ -76,17 +91,18 @@
   .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px; transition: border-color .2s, transform .2s; }
   .card:hover { border-color: #3b4757; transform: translateY(-2px); }
-  .card .ico { font-size: 26px; }
+  .card .ico { width: 26px; height: 26px; color: var(--accent); }
+  .card .ico svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
   .card h3 { font-size: 18px; margin: 10px 0 6px; }
   .card p { color: var(--muted); font-size: 15px; }
   .card.wide { grid-column: span 2; }
 
-  /* rack stats */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
-  .stat b { display: block; font-family: var(--mono); font-size: 30px; font-weight: 600; color: var(--text); }
-  .stat span { color: var(--muted); font-size: 14px; }
-  .rack-note { color: var(--muted); margin-top: 18px; font-size: 15px; }
+  /* how i run it */
+  .practices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .practice { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .practice b { display: flex; align-items: center; gap: 8px; font-size: 16px; }
+  .practice b::before { content: "✓"; font-family: var(--mono); color: var(--ok); font-size: 14px; }
+  .practice span { display: block; color: var(--muted); font-size: 14px; margin-top: 4px; }
   .status { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 22px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(74,222,128,.6); animation: pulse 2s infinite; }
   @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
@@ -113,6 +129,10 @@
   .work .card p + p { margin-top: 12px; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .chip { font-family: var(--mono); font-size: 12px; padding: 4px 9px; border-radius: 6px; background: #1c2430; color: var(--muted); border: 1px solid var(--line); }
+  .card strong { color: var(--text); font-weight: 500; }
+  .chip-label { flex-basis: 100%; font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-top: 8px; }
+  .chip-label:first-child { margin-top: 0; }
+  .chip.hot { color: var(--accent); border-color: rgba(94,234,212,.35); }
   .more { display: inline-block; margin-top: 16px; font-family: var(--mono); font-size: 13px; }
   .hours { font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--text); margin-top: 10px; }
   .card code { font-family: var(--mono); font-size: 13px; color: var(--accent); }
@@ -145,12 +165,15 @@
   .links { display: flex; gap: 18px; }
 
   @media (max-width: 760px) {
-    .hero, .grid, .stats, .work { grid-template-columns: 1fr; }
+    .hero, .grid, .practices, .work { grid-template-columns: 1fr; }
     .card.wide { grid-column: auto; }
     .build { grid-template-columns: 1fr; }
     nav ul { display: none; }
     #runner { left: 16px; right: 16px; width: auto; bottom: 16px; }
     .hero h1 { white-space: normal; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   }
 </style>
 </head>
@@ -162,7 +185,7 @@
     <ul>
       <li><a href="#work">work</a></li>
       <li><a href="#into">stuff i do</a></li>
-      <li><a href="#rack">the rack</a></li>
+      <li><a href="#lab">how i run it</a></li>
       <li><a href="#building">building</a></li>
           </ul>
   </nav>
@@ -177,7 +200,7 @@
         <a class="btn" href="https://github.com/Tweak000" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>github</a>
       </div>
       <div class="tags">
-        <span class="tag">test automation</span><span class="tag">homelab</span><span class="tag">docker</span>
+        <span class="tag">playwright</span><span class="tag">homelab</span><span class="tag">docker</span>
         <span class="tag">wow</span><span class="tag">factory games</span><span class="tag">dungeon master</span><span class="tag">3d printing</span>
         <span class="tag">linux (btw)</span>
       </div>
@@ -193,22 +216,26 @@
     <h2>What I do for a living</h2>
     <div class="work">
       <div class="card">
-        <div class="ico">🧪</div>
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.5a1 1 0 0 0 .9 1.5h12.8a1 1 0 0 0 .9-1.5l-5.1-10.1a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></div>
         <h3>Software Development Engineer in Test</h3>
-        <p>I build the automation that tells a team whether its software actually works, and I'd rather a test catch it than a customer.</p>
+        <p>I build the test automation for an Angular app: end-to-end suites in <strong>Playwright</strong>, built on custom fixtures and page objects, and load tests in <strong>Artillery</strong>. I'd rather a test catch it than a customer.</p>
         <p>The homelab is where I practice the same habits on my own systems: automate it, monitor it, write it down.</p>
         <a class="more" href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">full history on linkedin →</a>
         <p class="ci">
-          <a href="https://github.com/Tweak000/heyiamdan/actions" target="_blank" rel="noopener"><img src="https://img.shields.io/github/actions/workflow/status/Tweak000/heyiamdan/ci.yml?branch=main&amp;label=playwright&amp;logo=playwright&amp;style=flat-square" alt="Playwright tests status" onerror="this.parentElement.remove()"></a>
+          <a href="https://github.com/Tweak000/heyiamdan/actions" target="_blank" rel="noopener"><img src="badge.svg" alt="Playwright test results from the last deploy" height="20"></a>
           This page is tested with Playwright on every push. Hit <kbd>▶ run tests</kbd> up top to watch it test itself.
         </p>
       </div>
       <div class="card">
-        <div class="ico">🧰</div>
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/></svg></div>
         <h3>Toolbox</h3>
         <div class="chips">
-          <span class="chip">test automation</span><span class="chip">ci pipelines</span><span class="chip">linux</span>
-          <span class="chip">docker</span><span class="chip">proxmox</span><span class="chip">networking</span>
+          <span class="chip-label">testing</span>
+          <span class="chip hot">playwright</span><span class="chip hot">fixtures</span><span class="chip hot">page objects</span>
+          <span class="chip hot">artillery</span><span class="chip">angular</span><span class="chip">ci pipelines</span><span class="chip">accessibility</span>
+          <span class="chip-label">infrastructure</span>
+          <span class="chip">linux</span><span class="chip">docker</span><span class="chip">proxmox</span><span class="chip">networking</span>
+          <span class="chip-label">building</span>
           <span class="chip">go</span><span class="chip">sqlite</span><span class="chip">shell</span><span class="chip">openscad</span>
         </div>
       </div>
@@ -220,27 +247,27 @@
     <h2>Things I spend too much time on</h2>
     <div class="grid">
       <div class="card wide">
-        <div class="ico">🖥️</div>
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01M10 6h4M10 18h4"/></svg></div>
         <h3>The homelab</h3>
         <p>An old enterprise server, a pile of containers, a NAS, and a UPS that's the only thing standing between me and a very bad day. Media, cloud storage, game servers: if I can host it myself, I probably am.</p>
       </div>
       <div class="card">
-        <div class="ico">🐉</div>
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8.7 5v10L12 22l-8.7-5V7z"/><path d="M12 7l4.5 8h-9z"/><path d="M12 2v5M3.3 7l4.2 8M20.7 7l-4.2 8M7.5 15L12 22l4.5-7"/></svg></div>
         <h3>Dungeon master</h3>
         <p>Running a homebrew 5e campaign for my friends on a self-hosted virtual tabletop. No regrets.</p>
       </div>
       <div class="card">
-        <div class="ico">🖨️</div>
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg></div>
         <h3>3D printing</h3>
         <p>Bambu X1-Carbon with 8 filament slots. Mostly rack gear and enclosures, like a custom case for the Pi that rips my Blu-rays.</p>
       </div>
       <div class="card">
-        <div class="ico">🚁</div>
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="5.5" r="3"/><circle cx="18.5" cy="5.5" r="3"/><circle cx="5.5" cy="18.5" r="3"/><circle cx="18.5" cy="18.5" r="3"/><path d="M8 8l2 2M16 8l-2 2M8 16l2-2M16 16l-2-2"/><rect x="10" y="10" width="4" height="4" rx="1"/></svg></div>
         <h3>RC &amp; FPV</h3>
         <p>A Tinyhawk II for flying indoors, and an Arrma Gorgon monster truck, currently waiting on a new pinion gear.</p>
       </div>
       <div class="card">
-        <div class="ico">🎮</div>
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6C2.6 9.4 2 14.5 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.4-1.4a2 2 0 0 1 1.4-.6h4.4a2 2 0 0 1 1.4.6L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.5-.6-6.6-.7-7.3A4 4 0 0 0 17.3 5z"/></svg></div>
         <h3>Gaming</h3>
         <div class="hours">2,271 <small>hours in Satisfactory</small></div>
         <p>And that's just Steam. My World of Warcraft <code>/played</code> makes it look like a free trial. Also Factorio, because an SDET who automates for fun is shocking, I know.</p>
@@ -248,16 +275,17 @@
     </div>
   </section>
 
-  <section id="rack">
-    <div class="eyebrow">// the rack</div>
-    <h2>What's humming in the closet</h2>
-    <div class="stats">
-      <div class="stat"><b>192 GB</b><span>RAM, most of it idle</span></div>
-      <div class="stat"><b>32</b><span>CPU threads</span></div>
-      <div class="stat"><b>25+</b><span>self-hosted services</span></div>
-      <div class="stat"><b>∞</b><span>things left to automate</span></div>
+  <section id="lab">
+    <div class="eyebrow">// how i run it</div>
+    <h2>Run like production, just smaller</h2>
+    <div class="practices">
+      <div class="practice"><b>TLS on everything</b><span>One reverse proxy in front, real certificates, nothing served in plain text.</span></div>
+      <div class="practice"><b>Admin stays inside</b><span>Management tools only answer to the local network or the VPN.</span></div>
+      <div class="practice"><b>Monitored</b><span>Every service has an uptime check, and the alerts only fire when something's actually down.</span></div>
+      <div class="practice"><b>Backups get tested</b><span>Verified, not assumed. A backup you haven't restored is a rumor.</span></div>
+      <div class="practice"><b>Power-aware</b><span>When the UPS runs low, everything shuts down gracefully, in order.</span></div>
+      <div class="practice"><b>Written down</b><span>Every host and service has a note in Obsidian, because I won't remember.</span></div>
     </div>
-    <p class="rack-note">A hypervisor, a lot of containers, a reverse proxy, and a healthy amount of paranoia. All of it written down in Obsidian, because I won't remember.</p>
     <div class="status"><span class="dot"></span><span id="status-text">all systems nominal (probably)</span></div>
   </section>
 
@@ -283,13 +311,13 @@
       <div class="build">
         <span class="state s-live">live</span>
         <div><h3>This page</h3><p>You're looking at it. Hand-written HTML, no framework.</p></div>
-        <span class="meta">html · css</span>
+        <span class="meta">html · playwright</span>
       </div>
     </div>
   </section>
 
   <footer>
-    <span>© 2026 dan gutwald · self-hosted, obviously</span>
+    <span>© 2026 dan gutwald · hand-written, tested on every push</span>
     <div class="links">
       <a href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">linkedin</a>
       <a href="https://github.com/Tweak000" target="_blank" rel="noopener">github</a>
@@ -309,7 +337,7 @@
     ['p', '$ '], ['v', 'whoami\n'], ['', 'dan gutwald · sdet\n\n'],
     ['p', '$ '], ['v', 'make test\n'], ['', '5 passed, 1 flaky '], ['k', '(drone landings)'], ['', '\n\n'],
     ['p', '$ '], ['v', 'cat focus.txt\n'],
-    ['k', 'test automation'], ['', ' · '], ['k', 'ci/cd'], ['', ' · '], ['k', 'reliability'], ['', '\n\n'],
+    ['k', 'playwright'], ['', ' · '], ['k', 'artillery'], ['', ' · '], ['k', 'ci/cd'], ['', '\n\n'],
     ['p', '$ '], ['v', '/played\n'],
     ['k', 'world of warcraft'], ['', '  '], ['e', 'ERR integer overflow'], ['', '\n'],
     ['k', 'satisfactory'], ['', '       2,271h\n'],
@@ -326,11 +354,15 @@
     if (ci >= txt.length) { li++; ci = 0; }
     setTimeout(tick, cls === 'v' ? 45 : 12);
   }
-  tick();
+  const stillMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (stillMotion) {
+    for (const [cls, txt] of lines) { const sp = document.createElement('span'); if (cls) sp.className = cls; sp.textContent = txt; el.appendChild(sp); }
+    el.insertAdjacentHTML('beforeend', '<span class="cursor"></span>');
+  } else tick();
 
   const quips = ['all systems nominal (probably)', 'nothing on fire right now', 'backups ran. i checked.', 'the fans are fine, that\'s just how it sounds'];
   let qi = 0;
-  setInterval(() => { qi = (qi + 1) % quips.length; document.getElementById('status-text').textContent = quips[qi]; }, 4000);
+  if (!stillMotion) setInterval(() => { qi = (qi + 1) % quips.length; document.getElementById('status-text').textContent = quips[qi]; }, 4000);
 
   // ---- self-test replay: runs the same checks.json as the CI suite ----
   (() => {

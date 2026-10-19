@@ -1,69 +1,68 @@
-import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
+import { test, expect } from './fixtures';
+import type { Check } from './pages/home-page';
 
-type Check = { title: string; selector: string; text?: string; attr?: [string, string]; count?: number; timeout?: number };
-type Leak = { title: string; pattern: string };
+// Read at collection time so each check becomes its own test.
+const { checks } = JSON.parse(readFileSync('site/checks.json', 'utf8')) as { checks: Check[] };
 
-// The same list drives the "▶ run tests" replay on the page itself.
-const { checks, leaks } = JSON.parse(readFileSync('site/checks.json', 'utf8')) as { checks: Check[]; leaks: Leak[] };
-
-test.describe('heyiamdan.com', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-  });
-
-  for (const c of checks) {
-    test(c.title, async ({ page }) => {
-      const loc = page.locator(c.selector);
-      const timeout = c.timeout ?? 5000;
-      if (c.count !== undefined) {
-        await expect(loc).toHaveCount(c.count, { timeout });
-        return;
-      }
-      await expect(loc.first()).toBeVisible({ timeout });
-      if (c.text) await expect(loc.first()).toContainText(c.text, { timeout });
-      if (c.attr) await expect(loc.first()).toHaveAttribute(c.attr[0], new RegExp(c.attr[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+test.describe('content (shared with the in-page replay)', () => {
+  for (const check of checks) {
+    test(check.title, async ({ homePage }) => {
+      await homePage.expectCheck(check);
     });
   }
+});
 
-  test('no leaks in the page source', async ({ page }) => {
-    const html = await page.content();
-    for (const l of leaks) {
-      expect(html.match(new RegExp(l.pattern, 'g')) ?? [], l.title).toEqual([]);
+test.describe('privacy & security', () => {
+  test('no leaks in the page source', async ({ homePage, siteChecks }) => {
+    const html = await homePage.page.content();
+    for (const leak of siteChecks.leaks) {
+      expect(html.match(new RegExp(leak.pattern, 'g')) ?? [], leak.title).toEqual([]);
     }
-    // Extra terms (host names, usernames...) come from a CI secret so the list itself stays private.
-    const extra = (process.env.LEAK_TERMS ?? '').split(',').map(t => t.trim()).filter(Boolean);
+    // Private terms (host names, usernames...) come from a CI secret, so the list itself stays private.
+    const extra = (process.env.LEAK_TERMS ?? '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
     for (const term of extra) {
-      expect(html.toLowerCase().includes(term.toLowerCase()), `page must not mention a private term`).toBe(false);
+      expect(html.toLowerCase().includes(term), 'page must not mention a private term').toBe(false);
     }
   });
 
-  test('no console errors', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    page.on('pageerror', e => errors.push(e.message));
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-    expect(errors).toEqual([]);
+  test('no third-party requests', async ({ homePage, thirdPartyRequests }) => {
+    await homePage.page.waitForLoadState('networkidle');
+    expect(thirdPartyRequests).toEqual([]);
   });
+});
 
-  test('no serious accessibility violations', async ({ page }) => {
-    const results = await new AxeBuilder({ page }).analyze();
+test.describe('quality', () => {
+  test('no serious accessibility violations', async ({ homePage }) => {
+    const results = await new AxeBuilder({ page: homePage.page }).analyze();
     const serious = results.violations.filter(v => v.impact === 'serious' || v.impact === 'critical');
     expect(serious.map(v => `${v.id}: ${v.help}`)).toEqual([]);
   });
 
-  test('no sideways scrolling on a phone', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 800 });
-    await page.reload();
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-    expect(overflow).toBeLessThanOrEqual(0);
+  test('no sideways scrolling on a phone', async ({ homePage }) => {
+    await homePage.page.setViewportSize({ width: 375, height: 800 });
+    expect(await homePage.horizontalOverflow()).toBeLessThanOrEqual(0);
   });
 
-  test('the page can test itself', async ({ page }) => {
-    await page.getByRole('button', { name: /run tests/i }).click();
-    await expect(page.locator('#runner')).toContainText(/\d+ passed/, { timeout: 30000 });
-    await expect(page.locator('#runner')).not.toContainText('failed');
+  test('link previews have a title, description and image', async ({ homePage, request }) => {
+    await expect(homePage.meta('og:title')).toHaveAttribute('content', /hey, i am dan/);
+    await expect(homePage.meta('og:description')).toHaveAttribute('content', /.+/);
+    await expect(homePage.meta('twitter:card')).toHaveAttribute('content', 'summary_large_image');
+    await expect(homePage.meta('og:image')).toHaveAttribute('content', 'https://heyiamdan.com/og.png');
+    const image = await request.get('/og.png');
+    expect(image.ok()).toBe(true);
+    expect(image.headers()['content-type']).toBe('image/png');
   });
+
+  test('reduced motion shows the terminal without typing it out', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await expect(page.locator('#term')).toContainText('integer overflow', { timeout: 500 });
+  });
+});
+
+test('the page can test itself', async ({ homePage }) => {
+  await homePage.runSelfTest();
+  await expect(homePage.runner).not.toContainText('failed');
 });

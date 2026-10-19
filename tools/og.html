@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("../site/fonts/space-grotesk-latin-700-normal.woff2"); }
+  @font-face { font-family: "Space Grotesk"; font-weight: 400; src: url("../site/fonts/space-grotesk-latin-400-normal.woff2"); }
+  @font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("../site/fonts/jetbrains-mono-latin-400-normal.woff2"); }
+  * { margin: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; background: #0d1117; color: #e6edf3; font-family: "Space Grotesk";
+    background-image: radial-gradient(circle at 12% 0%, #1b2a3a 0, transparent 50%), radial-gradient(circle at 92% 40%, #22183a 0, transparent 45%);
+    display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: center; padding: 72px; }
+  h1 { white-space: nowrap; font-size: 74px; line-height: 1; letter-spacing: -0.03em; font-weight: 700; }
+  .role { font-family: "JetBrains Mono"; font-size: 24px; color: #5eead4; margin-top: 22px; }
+  .role span { color: #8b98a8; }
+  .name { font-size: 30px; color: #8b98a8; margin-top: 28px; }
+  .url { font-family: "JetBrains Mono"; font-size: 20px; color: #8b98a8; margin-top: 36px; }
+  .term { background: #0a0e13; border: 1px solid #262f3a; border-radius: 16px; font-family: "JetBrains Mono"; font-size: 19px; line-height: 1.7; overflow: hidden; }
+  .bar { display: flex; gap: 8px; padding: 14px 16px; background: #151b23; border-bottom: 1px solid #262f3a; }
+  .bar i { width: 12px; height: 12px; border-radius: 50%; } .bar i:nth-child(1) { background: #f87171; } .bar i:nth-child(2) { background: #fbbf24; } .bar i:nth-child(3) { background: #4ade80; }
+  pre { padding: 20px 22px; color: #8b98a8; font-family: inherit; }
+  .p { color: #5eead4; } .v { color: #e6edf3; } .ok { color: #4ade80; } .e { color: #f87171; } .k { color: #a78bfa; }
+</style></head>
+<body>
+  <div>
+    <h1>hey, i am dan <span style="font-size:62px">👋</span></h1>
+    <div class="role">sdet <span>by day</span> · homelab <span>by night</span></div>
+    <div class="name">Dan Gutwald, Software Development Engineer in Test</div>
+    <div class="url">heyiamdan.com</div>
+  </div>
+  <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="p">$</span> <span class="v">npx playwright test</span>
+<span class="ok">✓</span> this page tests itself
+<span class="ok">✓</span> no leaks, no console errors
+<span class="ok">✓</span> accessible, mobile-friendly
+
+<span class="p">$</span> <span class="v">/played</span>
+<span class="k">world of warcraft</span> <span class="e">ERR overflow</span></pre></div>
+</body></html>
