@@ -14,7 +14,7 @@ test.describe('visual regression', () => {
       test.skip(!existsSync(testInfo.snapshotPath(shot)) && !updating, 'no baseline yet');
       await page.setViewportSize(view);
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      await page.goto('/');
+      await page.goto('./');
       await page.evaluate(() => document.fonts.ready);
       await expect(page).toHaveScreenshot(shot, {
         fullPage: true,

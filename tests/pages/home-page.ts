@@ -27,7 +27,7 @@ export class HomePage {
   }
 
   async goto() {
-    await this.page.goto('/');
+    await this.page.goto('./');
   }
 
   /** Runs one entry from site/checks.json. The in-page "▶ run tests" replay runs the same list. */

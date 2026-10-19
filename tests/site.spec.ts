@@ -38,14 +38,14 @@ test.describe('quality', () => {
     await expect(homePage.meta('og:description')).toHaveAttribute('content', /.+/);
     await expect(homePage.meta('twitter:card')).toHaveAttribute('content', 'summary_large_image');
     await expect(homePage.meta('og:image')).toHaveAttribute('content', 'https://heyiamdan.com/og.png');
-    const image = await request.get('/og.png');
+    const image = await request.get('og.png');
     expect(image.ok()).toBe(true);
     expect(image.headers()['content-type']).toBe('image/png');
   });
 
   test('reduced motion shows the terminal without typing it out', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/');
+    await page.goto('./');
     await expect(page.locator('#term')).toContainText('integer overflow', { timeout: 500 });
   });
 });

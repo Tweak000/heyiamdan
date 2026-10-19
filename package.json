@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "test": "playwright test",
+    "test:prod": "BASE_URL=https://heyiamdan.com playwright test",
     "serve": "node tools/serve.mjs",
     "og": "node tools/make-og.mjs"
   },
