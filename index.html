@@ -58,7 +58,7 @@
   .term-bar { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
   .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a4350; }
   .term-bar i:nth-child(1) { background: #f87171; } .term-bar i:nth-child(2) { background: var(--warn); } .term-bar i:nth-child(3) { background: var(--ok); }
-  .term pre { padding: 16px 18px; white-space: pre-wrap; color: var(--muted); min-height: 340px; }
+  .term pre { padding: 16px 18px; white-space: pre-wrap; color: var(--muted); min-height: 296px; }
   .term .p { color: var(--accent); } .term .v { color: var(--text); } .term .k { color: var(--accent-2); }
   .cursor { display: inline-block; width: 8px; height: 15px; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
@@ -269,8 +269,8 @@
   const lines = [
     ['p', '$ '], ['v', 'whoami\n'], ['', 'dan gutwald · sdet\n\n'],
     ['p', '$ '], ['v', 'make test\n'], ['', '5 passed, 1 flaky '], ['k', '(drone landings)'], ['', '\n\n'],
-    ['p', '$ '], ['v', 'steam --top 3\n'],
-    ['k', 'satisfactory'], ['', '  2,271h\n'], ['k', "no man's sky"], ['', '  1,431h\n'], ['k', 'palworld'], ['', '      517h\n\n'],
+    ['p', '$ '], ['v', 'cat focus.txt\n'],
+    ['k', 'test automation'], ['', ' · '], ['k', 'ci/cd'], ['', ' · '], ['k', 'reliability'], ['', '\n\n'],
     ['p', '$ '], ['v', '/played\n'], ['', 'world of warcraft: '], ['k', 'integer overflow'], ['', '\n\n'],
     ['p', '$ '],
   ];
