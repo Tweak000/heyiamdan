@@ -21,6 +21,9 @@ test.describe('privacy & security', () => {
     }
     // Private terms (host names, usernames...) come from a CI secret, so the list itself stays private.
     const extra = (process.env.LEAK_TERMS ?? '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+    // Only the count is reported, never the terms, so CI logs show whether the secret is actually set.
+    test.info().annotations.push({ type: 'leak-terms', description: `${extra.length} private terms checked` });
+    console.log(`LEAK_TERMS: ${extra.length} private terms checked`);
     for (const term of extra) {
       expect(html.toLowerCase().includes(term), 'page must not mention a private term').toBe(false);
     }
