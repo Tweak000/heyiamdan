@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hey, i am dan · Dan Gutwald</title>
+<meta name="description" content="Dan Gutwald: SDET by day, homelab tinkerer by night. Also a dungeon master and factory-game addict.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #151b23;
+    --line: #262f3a;
+    --text: #e6edf3;
+    --muted: #8b98a8;
+    --accent: #5eead4;
+    --accent-2: #a78bfa;
+    --warn: #fbbf24;
+    --ok: #4ade80;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --sans: "Space Grotesk", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg);
+    background-image: radial-gradient(circle at 15% 0%, #1b2a3a 0, transparent 45%),
+                      radial-gradient(circle at 90% 30%, #22183a 0, transparent 40%);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* nav */
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; font-family: var(--mono); font-size: 14px; }
+  nav .logo { color: var(--text); font-weight: 600; }
+  nav .logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 24px; padding: 0; }
+  nav ul a { color: var(--muted); }
+  nav ul a:hover { color: var(--text); text-decoration: none; }
+
+  /* hero */
+  .hero { padding: 72px 0 56px; display: grid; grid-template-columns: 1.45fr 1fr; gap: 40px; align-items: center; }
+  .hero h1 { white-space: nowrap; font-size: clamp(40px, 6.2vw, 70px); line-height: 1.02; letter-spacing: -0.03em; }
+  .hero h1 .wave { display: inline-block; animation: wave 2.4s ease-in-out infinite; transform-origin: 70% 70%; }
+  @keyframes wave { 0%,60%,100% { transform: rotate(0); } 10%,30% { transform: rotate(14deg); } 20% { transform: rotate(-8deg); } }
+  .hero p.lede { color: var(--muted); font-size: 20px; margin-top: 20px; max-width: 34ch; }
+  .hero p.lede strong { color: var(--text); font-weight: 500; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .tag { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--panel); }
+
+  /* terminal */
+  .term { background: #0a0e13; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-family: var(--mono); font-size: 13px; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+  .term-bar { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a4350; }
+  .term-bar i:nth-child(1) { background: #f87171; } .term-bar i:nth-child(2) { background: var(--warn); } .term-bar i:nth-child(3) { background: var(--ok); }
+  .term pre { padding: 16px 18px; white-space: pre-wrap; color: var(--muted); min-height: 340px; }
+  .term .p { color: var(--accent); } .term .v { color: var(--text); } .term .k { color: var(--accent-2); }
+  .cursor { display: inline-block; width: 8px; height: 15px; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* sections */
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  .eyebrow { font-family: var(--mono); font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: .12em; }
+  h2 { font-size: 32px; letter-spacing: -0.02em; margin: 6px 0 28px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px; transition: border-color .2s, transform .2s; }
+  .card:hover { border-color: #3b4757; transform: translateY(-2px); }
+  .card .ico { font-size: 26px; }
+  .card h3 { font-size: 18px; margin: 10px 0 6px; }
+  .card p { color: var(--muted); font-size: 15px; }
+  .card.wide { grid-column: span 2; }
+
+  /* rack stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .stat b { display: block; font-family: var(--mono); font-size: 30px; font-weight: 600; color: var(--text); }
+  .stat span { color: var(--muted); font-size: 14px; }
+  .rack-note { color: var(--muted); margin-top: 18px; font-size: 15px; }
+  .status { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 22px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(74,222,128,.6); animation: pulse 2s infinite; }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
+
+  /* now building */
+  .builds { display: grid; gap: 12px; }
+  .build { display: grid; grid-template-columns: 120px 1fr auto; gap: 20px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 22px; }
+  .build .state { font-family: var(--mono); font-size: 12px; padding: 4px 10px; border-radius: 6px; text-align: center; }
+  .s-active { background: rgba(94,234,212,.12); color: var(--accent); }
+  .s-parked { background: rgba(251,191,36,.12); color: var(--warn); }
+  .s-live { background: rgba(74,222,128,.12); color: var(--ok); }
+  .build h3 { font-size: 17px; } .build p { color: var(--muted); font-size: 14px; }
+  .build .meta { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+  .role { font-family: var(--mono); font-size: 14px; color: var(--accent); margin-top: 14px; }
+  .role span { color: var(--muted); }
+  .cta { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 13px; color: var(--text); padding: 9px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); transition: border-color .15s, transform .15s; }
+  .btn:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); }
+  .btn.primary { background: var(--accent); color: #062a26; border-color: var(--accent); font-weight: 600; }
+  .btn svg { width: 15px; height: 15px; fill: currentColor; }
+
+  .work { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; }
+  .work .card p + p { margin-top: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .chip { font-family: var(--mono); font-size: 12px; padding: 4px 9px; border-radius: 6px; background: #1c2430; color: var(--muted); border: 1px solid var(--line); }
+  .more { display: inline-block; margin-top: 16px; font-family: var(--mono); font-size: 13px; }
+  .hours { font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--text); margin-top: 10px; }
+  .hours small { font-size: 13px; color: var(--muted); font-weight: 400; }
+
+  footer { padding: 48px 0 64px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  .links { display: flex; gap: 18px; }
+
+  @media (max-width: 760px) {
+    .hero, .grid, .stats, .work { grid-template-columns: 1fr; }
+    .card.wide { grid-column: auto; }
+    .build { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+    .hero h1 { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <div class="logo">dan gutwald<span>.</span></div>
+    <ul>
+      <li><a href="#work">work</a></li>
+      <li><a href="#into">stuff i do</a></li>
+      <li><a href="#rack">the rack</a></li>
+      <li><a href="#building">building</a></li>
+          </ul>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <h1>hey, i am dan <span class="wave">👋</span></h1>
+      <div class="role">sdet <span>by day</span> · homelab <span>by night</span></div>
+      <p class="lede">I break software <strong>on purpose</strong> so it doesn't break by accident. After hours I run a <strong>server rack in my house</strong> and build factories I never quite finish.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.15C0 .52.52 0 1.17 0h13.66C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.17 1.15H1.17C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.18c.84 0 1.36-.55 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .7.52 1.25 1.33 1.25h.01zm2.53 8.22h2.4V9.36c0-.21.02-.43.08-.58.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.87h2.4V9.25c0-2.22-1.18-3.26-2.77-3.26-1.28 0-1.84.71-2.16 1.21h.02V6.17h-2.4c.03.68 0 7.23 0 7.23z"/></svg>linkedin</a>
+        <a class="btn" href="https://github.com/Tweak000" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>github</a>
+      </div>
+      <div class="tags">
+        <span class="tag">test automation</span><span class="tag">homelab</span><span class="tag">docker</span>
+        <span class="tag">factory games</span><span class="tag">dungeon master</span><span class="tag">3d printing</span>
+        <span class="tag">linux (btw)</span>
+      </div>
+    </div>
+    <div class="term" aria-label="terminal">
+      <div class="term-bar"><i></i><i></i><i></i></div>
+      <pre id="term"></pre>
+    </div>
+  </header>
+
+  <section id="work">
+    <div class="eyebrow">// work</div>
+    <h2>What I do for a living</h2>
+    <div class="work">
+      <div class="card">
+        <div class="ico">🧪</div>
+        <h3>Software Development Engineer in Test</h3>
+        <p>I build the automation that tells a team whether its software actually works, and I'd rather a test catch it than a customer.</p>
+        <p>The homelab is where I practice the same habits on my own systems: automate it, monitor it, write it down.</p>
+        <a class="more" href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">full history on linkedin →</a>
+      </div>
+      <div class="card">
+        <div class="ico">🧰</div>
+        <h3>Toolbox</h3>
+        <div class="chips">
+          <span class="chip">test automation</span><span class="chip">ci pipelines</span><span class="chip">linux</span>
+          <span class="chip">docker</span><span class="chip">proxmox</span><span class="chip">networking</span>
+          <span class="chip">go</span><span class="chip">sqlite</span><span class="chip">shell</span><span class="chip">openscad</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="into">
+    <div class="eyebrow">// stuff i do</div>
+    <h2>Things I spend too much time on</h2>
+    <div class="grid">
+      <div class="card wide">
+        <div class="ico">🖥️</div>
+        <h3>The homelab</h3>
+        <p>An old enterprise server, a pile of containers, a NAS, and a UPS that's the only thing standing between me and a very bad day. Media, cloud storage, game servers: if I can host it myself, I probably am.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🐉</div>
+        <h3>Dungeon master</h3>
+        <p>Running a homebrew 5e campaign for my friends on a self-hosted virtual tabletop. No regrets.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🖨️</div>
+        <h3>3D printing</h3>
+        <p>Bambu X1-Carbon with 8 filament slots. Mostly rack gear and enclosures, like a custom case for the Pi that rips my Blu-rays.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🚁</div>
+        <h3>RC &amp; FPV</h3>
+        <p>A Tinyhawk II for flying indoors, and an Arrma Gorgon monster truck, currently waiting on a new pinion gear.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🏭</div>
+        <h3>Factory games</h3>
+        <div class="hours">2,271 <small>hours in Satisfactory</small></div>
+        <p>Plus Factorio and Dyson Sphere Program. An SDET who automates for fun. Shocking, I know.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="rack">
+    <div class="eyebrow">// the rack</div>
+    <h2>What's humming in the closet</h2>
+    <div class="stats">
+      <div class="stat"><b>192 GB</b><span>RAM, most of it idle</span></div>
+      <div class="stat"><b>32</b><span>CPU threads</span></div>
+      <div class="stat"><b>25+</b><span>self-hosted services</span></div>
+      <div class="stat"><b>∞</b><span>things left to automate</span></div>
+    </div>
+    <p class="rack-note">A hypervisor, a lot of containers, a reverse proxy, and a healthy amount of paranoia. All of it written down in Obsidian, because I won't remember.</p>
+    <div class="status"><span class="dot"></span><span id="status-text">all systems nominal (probably)</span></div>
+  </section>
+
+  <section id="building">
+    <div class="eyebrow">// currently building</div>
+    <h2>On the workbench</h2>
+    <div class="builds">
+      <div class="build">
+        <span class="state s-active">active</span>
+        <div><h3>Stockpile</h3><p>A small, single-binary web UI for LanCache with prefill scheduling and a "Doctor" page that catches the usual gotchas. Go + SQLite.</p></div>
+        <span class="meta">go · sqlite</span>
+      </div>
+      <div class="build">
+        <span class="state s-active">active</span>
+        <div><h3>The campaign</h3><p>A homebrew 5e campaign world for my friends. No spoilers.</p></div>
+        <span class="meta">5e · homebrew</span>
+      </div>
+      <div class="build">
+        <span class="state s-parked">parked</span>
+        <div><h3>Claude Watcher</h3><p>A spare Pi that runs a morning health check on the lab and pings my phone only if something's broken.</p></div>
+        <span class="meta">pi · ntfy</span>
+      </div>
+      <div class="build">
+        <span class="state s-live">live</span>
+        <div><h3>This page</h3><p>You're looking at it. Hand-written HTML, no framework.</p></div>
+        <span class="meta">html · css</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 dan gutwald · self-hosted, obviously</span>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">linkedin</a>
+      <a href="https://github.com/Tweak000" target="_blank" rel="noopener">github</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const lines = [
+    ['p', '$ '], ['v', 'whoami\n'], ['', 'dan gutwald · sdet\n\n'],
+    ['p', '$ '], ['v', 'make test\n'], ['', '5 passed, 1 flaky '], ['k', '(drone landings)'], ['', '\n\n'],
+    ['p', '$ '], ['v', 'steam --top 3\n'],
+    ['k', 'satisfactory'], ['', '  2,271h\n'], ['k', "no man's sky"], ['', '  1,431h\n'], ['k', 'palworld'], ['', '      517h\n\n'],
+    ['p', '$ '], ['v', 'ls ~/rack\n'], ['', 'server/  nas/  pi/  ups/  bob-the-printer/\n\n'],
+    ['p', '$ '],
+  ];
+  const el = document.getElementById('term');
+  let li = 0, ci = 0, span = null;
+  function tick() {
+    if (li >= lines.length) { el.insertAdjacentHTML('beforeend', '<span class="cursor"></span>'); return; }
+    const [cls, txt] = lines[li];
+    if (ci === 0) { span = document.createElement('span'); if (cls) span.className = cls; el.appendChild(span); }
+    span.textContent += txt[ci++];
+    if (ci >= txt.length) { li++; ci = 0; }
+    setTimeout(tick, cls === 'v' ? 45 : 12);
+  }
+  tick();
+
+  const quips = ['all systems nominal (probably)', 'nothing on fire right now', 'backups ran. i checked.', 'the fans are fine, that\'s just how it sounds'];
+  let qi = 0;
+  setInterval(() => { qi = (qi + 1) % quips.length; document.getElementById('status-text').textContent = quips[qi]; }, 4000);
+</script>
+</body>
+</html>
