@@ -110,6 +110,7 @@
   .chip { font-family: var(--mono); font-size: 12px; padding: 4px 9px; border-radius: 6px; background: #1c2430; color: var(--muted); border: 1px solid var(--line); }
   .more { display: inline-block; margin-top: 16px; font-family: var(--mono); font-size: 13px; }
   .hours { font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--text); margin-top: 10px; }
+  .card code { font-family: var(--mono); font-size: 13px; color: var(--accent); }
   .hours small { font-size: 13px; color: var(--muted); font-weight: 400; }
 
   footer { padding: 48px 0 64px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
@@ -148,7 +149,7 @@
       </div>
       <div class="tags">
         <span class="tag">test automation</span><span class="tag">homelab</span><span class="tag">docker</span>
-        <span class="tag">factory games</span><span class="tag">dungeon master</span><span class="tag">3d printing</span>
+        <span class="tag">wow</span><span class="tag">factory games</span><span class="tag">dungeon master</span><span class="tag">3d printing</span>
         <span class="tag">linux (btw)</span>
       </div>
     </div>
@@ -206,10 +207,10 @@
         <p>A Tinyhawk II for flying indoors, and an Arrma Gorgon monster truck, currently waiting on a new pinion gear.</p>
       </div>
       <div class="card">
-        <div class="ico">🏭</div>
-        <h3>Factory games</h3>
+        <div class="ico">🎮</div>
+        <h3>Gaming</h3>
         <div class="hours">2,271 <small>hours in Satisfactory</small></div>
-        <p>Plus Factorio and Dyson Sphere Program. An SDET who automates for fun. Shocking, I know.</p>
+        <p>And that's just Steam. My World of Warcraft <code>/played</code> makes it look like a free trial. Also Factorio, because an SDET who automates for fun is shocking, I know.</p>
       </div>
     </div>
   </section>
@@ -270,7 +271,7 @@
     ['p', '$ '], ['v', 'make test\n'], ['', '5 passed, 1 flaky '], ['k', '(drone landings)'], ['', '\n\n'],
     ['p', '$ '], ['v', 'steam --top 3\n'],
     ['k', 'satisfactory'], ['', '  2,271h\n'], ['k', "no man's sky"], ['', '  1,431h\n'], ['k', 'palworld'], ['', '      517h\n\n'],
-    ['p', '$ '], ['v', 'ls ~/rack\n'], ['', 'server/  nas/  pi/  ups/  bob-the-printer/\n\n'],
+    ['p', '$ '], ['v', '/played\n'], ['', 'world of warcraft: '], ['k', 'integer overflow'], ['', '\n\n'],
     ['p', '$ '],
   ];
   const el = document.getElementById('term');
