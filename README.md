@@ -8,7 +8,11 @@ My personal landing page. Hand-written HTML and CSS, no framework, no build step
 - `tests/` runs those checks with Playwright in Chromium and Firefox, written the way I write
   tests at work: a page object (`tests/pages/home-page.ts`) and custom fixtures (`tests/fixtures.ts`).
   An auto fixture fails any test that logs a console error.
-- On top of the shared checks: accessibility (axe), no third-party requests, no leaked emails or
+- `tests/a11y.spec.ts` is an accessibility suite: axe against WCAG 2.2 AA (desktop, phone, and with
+  the test runner open), landmarks, heading order, new-tab links that say so, a skip link, keyboard-only
+  use with visible focus, Escape returning focus, reflow at 320px (1.4.10), text spacing (1.4.12),
+  nothing animating forever (2.2.2), and an ARIA snapshot of what a screen reader gets.
+- On top of that: no third-party requests, no leaked emails or
   private IPs, no sideways scrolling on a phone, link-preview tags, reduced motion, and visual
   regression screenshots.
 - The **▶ run tests** button on the page replays the same `checks.json` in your browser, with a

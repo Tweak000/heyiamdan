@@ -50,6 +50,11 @@
   .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  main:focus { outline: none; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .skip { position: absolute; left: 16px; top: 12px; z-index: 100; padding: 8px 14px; border-radius: 8px; background: var(--accent); color: #062a26; font-family: var(--mono); font-size: 13px; font-weight: 600; transform: translateY(-150%); }
+  .skip:focus { transform: none; }
 
   /* nav */
   nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; font-family: var(--mono); font-size: 14px; }
@@ -62,11 +67,11 @@
   /* hero */
   .hero { padding: 72px 0 56px; display: grid; grid-template-columns: 1.45fr 1fr; gap: 40px; align-items: center; }
   .hero h1 { white-space: nowrap; font-size: clamp(40px, 6.2vw, 70px); line-height: 1.02; letter-spacing: -0.03em; }
-  .hero h1 .wave { display: inline-block; animation: wave 2.4s ease-in-out infinite; transform-origin: 70% 70%; }
+  .hero h1 .wave { display: inline-block; animation: wave 2.4s ease-in-out 2; transform-origin: 70% 70%; }
   @keyframes wave { 0%,60%,100% { transform: rotate(0); } 10%,30% { transform: rotate(14deg); } 20% { transform: rotate(-8deg); } }
   .hero p.lede { color: var(--muted); font-size: 20px; margin-top: 20px; max-width: 34ch; }
   .hero p.lede strong { color: var(--text); font-weight: 500; }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
   .tag { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--panel); }
 
   /* terminal */
@@ -76,11 +81,11 @@
   .term-bar { align-items: center; }
   .run-btn { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--accent); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; cursor: pointer; transition: border-color .15s, background .15s; }
   .run-btn:hover { border-color: var(--accent); background: rgba(94,234,212,.08); }
-  .run-btn:disabled { opacity: .5; cursor: progress; }
+  .run-btn[aria-disabled="true"] { opacity: .5; cursor: progress; }
   .term-bar i:nth-child(1) { background: #f87171; } .term-bar i:nth-child(2) { background: var(--warn); } .term-bar i:nth-child(3) { background: var(--ok); }
   .term pre { padding: 16px 18px; white-space: pre-wrap; color: var(--muted); min-height: 336px; }
   .term .p { color: var(--accent); } .term .v { color: var(--text); } .term .k { color: var(--accent-2); } .term .e { color: #f87171; }
-  .cursor { display: inline-block; width: 8px; height: 15px; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  .cursor { display: inline-block; width: 8px; height: 15px; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(1) 5; }
   @keyframes blink { 50% { opacity: 0; } }
 
   /* sections */
@@ -103,8 +108,10 @@
   .practice b { display: flex; align-items: center; gap: 8px; font-size: 16px; }
   .practice b::before { content: "✓"; font-family: var(--mono); color: var(--ok); font-size: 14px; }
   .practice span { display: block; color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .status { cursor: pointer; font: inherit; }
+  .status:hover { border-color: var(--accent); }
   .status { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 22px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(74,222,128,.6); animation: pulse 2s infinite; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(74,222,128,.6); animation: pulse 2s 2; }
   @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
 
   /* now building */
@@ -157,8 +164,9 @@
   #runner header button { margin-left: auto; background: none; border: 0; color: var(--muted); font-size: 16px; cursor: pointer; line-height: 1; }
   #runner .log { padding: 12px 14px; overflow-y: auto; line-height: 1.6; }
   #runner .row { color: var(--text); }
-  #runner .code { color: #5c6878; padding-left: 18px; margin-bottom: 4px; word-break: break-word; }
+  #runner .code { color: #8592a3; padding-left: 18px; margin-bottom: 4px; word-break: break-word; }
   #runner .ok { color: var(--ok); } #runner .bad { color: #f87171; } #runner .dim { color: var(--muted); }
+  #runner .sum a { text-decoration: underline; }
   #runner .sum { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
 
   footer { padding: 48px 0 64px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
@@ -178,6 +186,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">skip to content</a>
 <div class="wrap">
 
   <nav>
@@ -190,24 +199,33 @@
           </ul>
   </nav>
 
+  <main id="main" tabindex="-1">
+
   <header class="hero">
     <div>
-      <h1>hey, i am dan <span class="wave">👋</span></h1>
+      <h1>hey, i am dan <span class="wave" aria-hidden="true">👋</span></h1>
       <div class="role">sdet <span>by day</span> · homelab <span>by night</span></div>
       <p class="lede">I break software <strong>on purpose</strong> so it doesn't break by accident. After hours I run a <strong>server rack in my house</strong> and build factories I never quite finish.</p>
       <div class="cta">
-        <a class="btn primary" href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.15C0 .52.52 0 1.17 0h13.66C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.17 1.15H1.17C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.18c.84 0 1.36-.55 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .7.52 1.25 1.33 1.25h.01zm2.53 8.22h2.4V9.36c0-.21.02-.43.08-.58.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.87h2.4V9.25c0-2.22-1.18-3.26-2.77-3.26-1.28 0-1.84.71-2.16 1.21h.02V6.17h-2.4c.03.68 0 7.23 0 7.23z"/></svg>linkedin</a>
-        <a class="btn" href="https://github.com/Tweak000" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>github</a>
+        <a class="btn primary" href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.15C0 .52.52 0 1.17 0h13.66C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.17 1.15H1.17C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.18c.84 0 1.36-.55 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .7.52 1.25 1.33 1.25h.01zm2.53 8.22h2.4V9.36c0-.21.02-.43.08-.58.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.87h2.4V9.25c0-2.22-1.18-3.26-2.77-3.26-1.28 0-1.84.71-2.16 1.21h.02V6.17h-2.4c.03.68 0 7.23 0 7.23z"/></svg>linkedin<span class="sr-only"> (opens in new tab)</span></a>
+        <a class="btn" href="https://github.com/Tweak000" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>github<span class="sr-only"> (opens in new tab)</span></a>
       </div>
-      <div class="tags">
-        <span class="tag">playwright</span><span class="tag">homelab</span><span class="tag">docker</span>
-        <span class="tag">wow</span><span class="tag">factory games</span><span class="tag">dungeon master</span><span class="tag">3d printing</span><span class="tag">rc &amp; fpv</span>
-        <span class="tag">linux (btw)</span>
-      </div>
+      <ul class="tags" aria-label="interests">
+        <li class="tag">playwright</li>
+        <li class="tag">homelab</li>
+        <li class="tag">docker</li>
+        <li class="tag">wow</li>
+        <li class="tag">factory games</li>
+        <li class="tag">dungeon master</li>
+        <li class="tag">3d printing</li>
+        <li class="tag">rc &amp; fpv</li>
+        <li class="tag">linux (btw)</li>
+      </ul>
     </div>
-    <div class="term" aria-label="terminal">
-      <div class="term-bar"><i></i><i></i><i></i><button class="run-btn" id="run-tests" type="button">▶ run tests</button></div>
-      <pre id="term"></pre>
+    <div class="term">
+      <div class="term-bar"><i></i><i></i><i></i><button class="run-btn" id="run-tests" type="button"><span aria-hidden="true">▶ </span>run tests</button></div>
+      <pre id="term" aria-hidden="true"></pre>
+      <p class="sr-only">Terminal: whoami, dan gutwald, sdet. make test: 5 passed, 1 flaky (drone landings). Focus: playwright, UI and API testing, CI/CD. /played: World of Warcraft, integer overflow; Satisfactory, 2,271 hours; No Man's Sky, 1,431 hours.</p>
     </div>
   </header>
 
@@ -218,11 +236,11 @@
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.5a1 1 0 0 0 .9 1.5h12.8a1 1 0 0 0 .9-1.5l-5.1-10.1a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></div>
         <h3>Software Development Engineer in Test</h3>
-        <p>I build the test automation for an Angular app: end-to-end suites in <strong>Playwright</strong>, built on custom fixtures and page objects, and load tests in <strong>Artillery</strong>. I'd rather a test catch it than a customer.</p>
+        <p>I build the test automation for an Angular app: <strong>UI and API</strong> suites in <strong>Playwright</strong>, built on custom fixtures and page objects, plus some load testing with Artillery. I'd rather a test catch it than a customer.</p>
         <p>The homelab is where I practice the same habits on my own systems: automate it, monitor it, write it down.</p>
-        <a class="more" href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">full history on linkedin →</a>
+        <a class="more" href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">full history on linkedin →<span class="sr-only"> (opens in new tab)</span></a>
         <p class="ci">
-          <a href="https://github.com/Tweak000/heyiamdan/actions" target="_blank" rel="noopener"><img src="badge.svg" alt="Playwright test results from the last deploy" height="20"></a>
+          <a href="https://github.com/Tweak000/heyiamdan/actions" target="_blank" rel="noopener"><img src="badge.svg" alt="Playwright test results from the last deploy" height="20"><span class="sr-only"> (opens in new tab)</span></a>
           This page is tested with Playwright on every push. Hit <kbd>▶ run tests</kbd> up top to watch it test itself.
         </p>
       </div>
@@ -231,8 +249,8 @@
         <h3>Toolbox</h3>
         <div class="chips">
           <span class="chip-label">testing</span>
-          <span class="chip hot">playwright</span><span class="chip hot">fixtures</span><span class="chip hot">page objects</span>
-          <span class="chip hot">artillery</span><span class="chip">angular</span><span class="chip">ci pipelines</span><span class="chip">accessibility</span>
+          <span class="chip hot">playwright</span><span class="chip hot">ui testing</span><span class="chip hot">api testing</span>
+          <span class="chip hot">fixtures</span><span class="chip hot">page objects</span><span class="chip">artillery</span><span class="chip">angular</span><span class="chip">ci pipelines</span><span class="chip">accessibility</span>
           <span class="chip-label">infrastructure</span>
           <span class="chip">linux</span><span class="chip">docker</span><span class="chip">proxmox</span><span class="chip">networking</span>
           <span class="chip-label">building</span>
@@ -286,7 +304,7 @@
       <div class="practice"><b>Power-aware</b><span>When the UPS runs low, everything shuts down gracefully, in order.</span></div>
       <div class="practice"><b>Written down</b><span>Every host and service has a note in Obsidian, because I won't remember.</span></div>
     </div>
-    <div class="status"><span class="dot"></span><span id="status-text">all systems nominal (probably)</span></div>
+    <button type="button" class="status" id="status-pill" title="next status"><span class="dot" aria-hidden="true"></span><span class="sr-only">status: </span><span id="status-text" aria-live="polite">all systems nominal (probably)</span></button>
   </section>
 
   <section id="building">
@@ -316,11 +334,13 @@
     </div>
   </section>
 
+  </main>
+
   <footer>
     <span>© 2026 dan gutwald · hand-written, tested on every push</span>
     <div class="links">
-      <a href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">linkedin</a>
-      <a href="https://github.com/Tweak000" target="_blank" rel="noopener">github</a>
+      <a href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">linkedin<span class="sr-only"> (opens in new tab)</span></a>
+      <a href="https://github.com/Tweak000" target="_blank" rel="noopener">github<span class="sr-only"> (opens in new tab)</span></a>
     </div>
   </footer>
 
@@ -337,7 +357,7 @@
     ['p', '$ '], ['v', 'whoami\n'], ['', 'dan gutwald · sdet\n\n'],
     ['p', '$ '], ['v', 'make test\n'], ['', '5 passed, 1 flaky '], ['k', '(drone landings)'], ['', '\n\n'],
     ['p', '$ '], ['v', 'cat focus.txt\n'],
-    ['k', 'playwright'], ['', ' · '], ['k', 'artillery'], ['', ' · '], ['k', 'ci/cd'], ['', '\n\n'],
+    ['k', 'playwright'], ['', ' · '], ['k', 'ui + api'], ['', ' · '], ['k', 'ci/cd'], ['', '\n\n'],
     ['p', '$ '], ['v', '/played\n'],
     ['k', 'world of warcraft'], ['', '  '], ['e', 'ERR integer overflow'], ['', '\n'],
     ['k', 'satisfactory'], ['', '       2,271h\n'],
@@ -362,7 +382,7 @@
 
   const quips = ['all systems nominal (probably)', 'nothing on fire right now', 'backups ran. i checked.', 'the fans are fine, that\'s just how it sounds'];
   let qi = 0;
-  if (!stillMotion) setInterval(() => { qi = (qi + 1) % quips.length; document.getElementById('status-text').textContent = quips[qi]; }, 4000);
+  document.getElementById('status-pill').onclick = () => { qi = (qi + 1) % quips.length; document.getElementById('status-text').textContent = quips[qi]; };
 
   // ---- self-test replay: runs the same checks.json as the CI suite ----
   (() => {
@@ -374,7 +394,10 @@
     const sleep = ms => new Promise(r => setTimeout(r, calm ? Math.min(ms, 60) : ms));
     const esc = t => t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const add = html => { log.insertAdjacentHTML('beforeend', html); log.scrollTop = log.scrollHeight; };
-    document.getElementById('runner-close').onclick = () => { panel.classList.remove('open'); ghost.classList.remove('on'); };
+    const close = () => { panel.classList.remove('open'); ghost.classList.remove('on'); btn.focus(); };
+    document.getElementById('runner-close').onclick = close;
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) close(); });
+    let running = false;
 
     function codeFor(c) {
       const loc = `page.locator('${c.selector}')`;
@@ -410,7 +433,9 @@
     }
 
     btn.onclick = async () => {
-      btn.disabled = true;
+      if (running) return;
+      running = true;
+      btn.setAttribute('aria-disabled', 'true');
       log.innerHTML = '';
       panel.classList.add('open');
       ghost.classList.add('on');
@@ -445,10 +470,11 @@
       }
       const secs = ((performance.now() - t0) / 1000).toFixed(1);
       add(`<div class="sum"><span class="ok">${passed} passed</span>${failed ? ` <span class="bad">${failed} failed</span>` : ''} <span class="dim">(${secs}s)</span><br>
-        <span class="dim">same checks run in CI on every push → </span><a href="https://github.com/Tweak000/heyiamdan/actions" target="_blank" rel="noopener">github actions</a></div>`);
+        <span class="dim">same checks run in CI on every push → </span><a href="https://github.com/Tweak000/heyiamdan/actions" target="_blank" rel="noopener">github actions<span class="sr-only"> (opens in new tab)</span></a></div>`);
       window.scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' });
       ghost.classList.remove('on');
-      btn.disabled = false;
+      running = false;
+      btn.removeAttribute('aria-disabled');
     };
   })();
 

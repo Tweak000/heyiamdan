@@ -12,14 +12,18 @@ export class HomePage {
   readonly terminal: Locator;
   readonly runTests: Locator;
   readonly runner: Locator;
+  readonly skipLink: Locator;
+  readonly statusPill: Locator;
 
   constructor(readonly page: Page) {
     this.heading = page.getByRole('heading', { level: 1 });
-    this.linkedin = page.locator('.cta').getByRole('link', { name: 'linkedin' });
-    this.github = page.locator('.cta').getByRole('link', { name: 'github' });
+    this.linkedin = page.locator('.cta').getByRole('link', { name: /linkedin/ });
+    this.github = page.locator('.cta').getByRole('link', { name: /github/ });
     this.terminal = page.locator('#term');
     this.runTests = page.getByRole('button', { name: /run tests/i });
     this.runner = page.locator('#runner');
+    this.skipLink = page.getByRole('link', { name: /skip to content/i });
+    this.statusPill = page.getByRole('button', { name: /status/i });
   }
 
   async goto() {

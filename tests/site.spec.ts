@@ -1,4 +1,3 @@
-import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { test, expect } from './fixtures';
 import type { Check } from './pages/home-page';
@@ -34,17 +33,6 @@ test.describe('privacy & security', () => {
 });
 
 test.describe('quality', () => {
-  test('no serious accessibility violations', async ({ homePage }) => {
-    const results = await new AxeBuilder({ page: homePage.page }).analyze();
-    const serious = results.violations.filter(v => v.impact === 'serious' || v.impact === 'critical');
-    expect(serious.map(v => `${v.id}: ${v.help}`)).toEqual([]);
-  });
-
-  test('no sideways scrolling on a phone', async ({ homePage }) => {
-    await homePage.page.setViewportSize({ width: 375, height: 800 });
-    expect(await homePage.horizontalOverflow()).toBeLessThanOrEqual(0);
-  });
-
   test('link previews have a title, description and image', async ({ homePage, request }) => {
     await expect(homePage.meta('og:title')).toHaveAttribute('content', /hey, i am dan/);
     await expect(homePage.meta('og:description')).toHaveAttribute('content', /.+/);
