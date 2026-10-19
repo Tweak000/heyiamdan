@@ -1,0 +1,17 @@
+{
+  "checks": [
+    { "title": "hero heading says hey, i am dan", "selector": "h1", "text": "hey, i am dan" },
+    { "title": "role line says sdet", "selector": ".role", "text": "sdet" },
+    { "title": "linkedin button points to my profile", "selector": ".cta a.btn.primary", "attr": ["href", "linkedin.com/in/dan-gutwald"] },
+    { "title": "github button points to Tweak000", "selector": ".cta a.btn:not(.primary)", "attr": ["href", "github.com/Tweak000"] },
+    { "title": "/played overflows on world of warcraft", "selector": "#term", "text": "integer overflow", "timeout": 15000 },
+    { "title": "work section is present", "selector": "#work h2", "text": "What I do for a living" },
+    { "title": "five things I spend too much time on", "selector": "#into .card", "count": 5 },
+    { "title": "status pill is reassuring (probably)", "selector": "#status-text" },
+    { "title": "footer links to linkedin and github", "selector": "footer .links a", "count": 2 }
+  ],
+  "leaks": [
+    { "title": "no email addresses", "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" },
+    { "title": "no private IP addresses", "pattern": "\\b(10\\.\\d{1,3}|192\\.168|172\\.(1[6-9]|2\\d|3[01]))\\.\\d{1,3}\\.\\d{1,3}\\b" }
+  ]
+}

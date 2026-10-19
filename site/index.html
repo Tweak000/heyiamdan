@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>hey, i am dan · Dan Gutwald</title>
 <meta name="description" content="Dan Gutwald: SDET by day, homelab tinkerer by night. Also a dungeon master and factory-game addict.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%91%8B%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -57,6 +58,10 @@
   .term { background: #0a0e13; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-family: var(--mono); font-size: 13px; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
   .term-bar { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
   .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a4350; }
+  .term-bar { align-items: center; }
+  .run-btn { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--accent); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; cursor: pointer; transition: border-color .15s, background .15s; }
+  .run-btn:hover { border-color: var(--accent); background: rgba(94,234,212,.08); }
+  .run-btn:disabled { opacity: .5; cursor: progress; }
   .term-bar i:nth-child(1) { background: #f87171; } .term-bar i:nth-child(2) { background: var(--warn); } .term-bar i:nth-child(3) { background: var(--ok); }
   .term pre { padding: 16px 18px; white-space: pre-wrap; color: var(--muted); min-height: 336px; }
   .term .p { color: var(--accent); } .term .v { color: var(--text); } .term .k { color: var(--accent-2); } .term .e { color: #f87171; }
@@ -113,6 +118,29 @@
   .card code { font-family: var(--mono); font-size: 13px; color: var(--accent); }
   .hours small { font-size: 13px; color: var(--muted); font-weight: 400; }
 
+  .ci { margin-top: 14px; font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ci img { height: 20px; display: block; }
+  .ci kbd { font-family: var(--mono); font-size: 12px; color: var(--accent); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; }
+
+  /* self-test replay */
+  #ghost { position: fixed; left: 0; top: 0; width: 22px; height: 22px; z-index: 60; pointer-events: none; opacity: 0;
+    transition: transform .5s cubic-bezier(.3,.7,.2,1), opacity .2s; filter: drop-shadow(0 2px 6px rgba(0,0,0,.6)); }
+  #ghost.on { opacity: 1; }
+  #ghost.click::after { content: ""; position: absolute; left: -8px; top: -8px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--accent); animation: ping .5s ease-out; }
+  @keyframes ping { from { transform: scale(.3); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+  .pw-hl { outline: 2px solid var(--accent) !important; outline-offset: 4px; border-radius: 6px; transition: outline-color .2s; }
+  #runner { position: fixed; right: 24px; bottom: 24px; width: 420px; max-height: 60vh; z-index: 50; display: none; flex-direction: column;
+    background: #0a0e13; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 24px 60px rgba(0,0,0,.55); font-family: var(--mono); font-size: 12px; }
+  #runner.open { display: flex; }
+  #runner header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); background: var(--panel); border-radius: 12px 12px 0 0; }
+  #runner header b { color: var(--text); font-weight: 600; }
+  #runner header button { margin-left: auto; background: none; border: 0; color: var(--muted); font-size: 16px; cursor: pointer; line-height: 1; }
+  #runner .log { padding: 12px 14px; overflow-y: auto; line-height: 1.6; }
+  #runner .row { color: var(--text); }
+  #runner .code { color: #5c6878; padding-left: 18px; margin-bottom: 4px; word-break: break-word; }
+  #runner .ok { color: var(--ok); } #runner .bad { color: #f87171; } #runner .dim { color: var(--muted); }
+  #runner .sum { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+
   footer { padding: 48px 0 64px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
   .links { display: flex; gap: 18px; }
 
@@ -121,6 +149,7 @@
     .card.wide { grid-column: auto; }
     .build { grid-template-columns: 1fr; }
     nav ul { display: none; }
+    #runner { left: 16px; right: 16px; width: auto; bottom: 16px; }
     .hero h1 { white-space: normal; }
   }
 </style>
@@ -154,7 +183,7 @@
       </div>
     </div>
     <div class="term" aria-label="terminal">
-      <div class="term-bar"><i></i><i></i><i></i></div>
+      <div class="term-bar"><i></i><i></i><i></i><button class="run-btn" id="run-tests" type="button">▶ run tests</button></div>
       <pre id="term"></pre>
     </div>
   </header>
@@ -169,6 +198,10 @@
         <p>I build the automation that tells a team whether its software actually works, and I'd rather a test catch it than a customer.</p>
         <p>The homelab is where I practice the same habits on my own systems: automate it, monitor it, write it down.</p>
         <a class="more" href="https://www.linkedin.com/in/dan-gutwald-92b39080/" target="_blank" rel="noopener">full history on linkedin →</a>
+        <p class="ci">
+          <a href="https://github.com/Tweak000/heyiamdan/actions" target="_blank" rel="noopener"><img src="https://img.shields.io/github/actions/workflow/status/Tweak000/heyiamdan/ci.yml?branch=main&amp;label=playwright&amp;logo=playwright&amp;style=flat-square" alt="Playwright tests status" onerror="this.parentElement.remove()"></a>
+          This page is tested with Playwright on every push. Hit <kbd>▶ run tests</kbd> up top to watch it test itself.
+        </p>
       </div>
       <div class="card">
         <div class="ico">🧰</div>
@@ -265,6 +298,12 @@
 
 </div>
 
+<svg id="ghost" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2l16 9.5-7 1.6-3.6 6.9z" fill="#5eead4" stroke="#0a0e13" stroke-width="1.5" stroke-linejoin="round"/></svg>
+<div id="runner" role="log" aria-live="polite" aria-label="Test run">
+  <header><b>playwright</b><span id="runner-env">· your browser</span><button type="button" id="runner-close" aria-label="Close test run">×</button></header>
+  <div class="log" id="runner-log"></div>
+</div>
+
 <script>
   const lines = [
     ['p', '$ '], ['v', 'whoami\n'], ['', 'dan gutwald · sdet\n\n'],
@@ -292,6 +331,99 @@
   const quips = ['all systems nominal (probably)', 'nothing on fire right now', 'backups ran. i checked.', 'the fans are fine, that\'s just how it sounds'];
   let qi = 0;
   setInterval(() => { qi = (qi + 1) % quips.length; document.getElementById('status-text').textContent = quips[qi]; }, 4000);
+
+  // ---- self-test replay: runs the same checks.json as the CI suite ----
+  (() => {
+    const btn = document.getElementById('run-tests');
+    const panel = document.getElementById('runner');
+    const log = document.getElementById('runner-log');
+    const ghost = document.getElementById('ghost');
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sleep = ms => new Promise(r => setTimeout(r, calm ? Math.min(ms, 60) : ms));
+    const esc = t => t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const add = html => { log.insertAdjacentHTML('beforeend', html); log.scrollTop = log.scrollHeight; };
+    document.getElementById('runner-close').onclick = () => { panel.classList.remove('open'); ghost.classList.remove('on'); };
+
+    function codeFor(c) {
+      const loc = `page.locator('${c.selector}')`;
+      if (c.count !== undefined) return `expect(${loc}).toHaveCount(${c.count})`;
+      if (c.attr) return `expect(${loc}).toHaveAttribute('${c.attr[0]}', /${c.attr[1]}/)`;
+      if (c.text) return `expect(${loc}).toContainText('${c.text}')`;
+      return `expect(${loc}).toBeVisible()`;
+    }
+    async function moveTo(el) {
+      el.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'center' });
+      await sleep(450);
+      const b = el.getBoundingClientRect();
+      ghost.style.transform = `translate(${b.left + Math.min(b.width / 2, 120)}px, ${b.top + Math.min(b.height / 2, 40)}px)`;
+      await sleep(500);
+      ghost.classList.remove('click'); void ghost.offsetWidth; ghost.classList.add('click');
+    }
+    const visible = el => { const b = el.getBoundingClientRect(); return b.width > 0 && b.height > 0 && getComputedStyle(el).visibility !== 'hidden'; };
+    async function run(c) {
+      const deadline = performance.now() + (c.timeout ?? 5000);
+      for (;;) {
+        const els = [...document.querySelectorAll(c.selector)];
+        let ok;
+        if (c.count !== undefined) ok = els.length === c.count;
+        else {
+          const el = els[0];
+          ok = !!el && visible(el)
+            && (!c.text || el.textContent.includes(c.text))
+            && (!c.attr || (el.getAttribute(c.attr[0]) || '').includes(c.attr[1]));
+        }
+        if (ok || performance.now() > deadline) return { ok, els };
+        await sleep(200);
+      }
+    }
+
+    btn.onclick = async () => {
+      btn.disabled = true;
+      log.innerHTML = '';
+      panel.classList.add('open');
+      ghost.classList.add('on');
+      document.getElementById('runner-env').textContent = '· ' + (navigator.userAgent.includes('Firefox') ? 'firefox' : 'your browser');
+      const t0 = performance.now();
+      let passed = 0, failed = 0;
+      try {
+        const { checks, leaks } = await (await fetch('checks.json', { cache: 'no-store' })).json();
+        add(`<div class="dim">running ${checks.length + leaks.length} checks from checks.json</div><br>`);
+        for (const c of checks) {
+          const first = document.querySelector(c.selector);
+          if (first) { await moveTo(first); first.classList.add('pw-hl'); }
+          const { ok, els } = await run(c);
+          if (c.count !== undefined) els.forEach(e => e.classList.add('pw-hl'));
+          ok ? passed++ : failed++;
+          add(`<div class="row"><span class="${ok ? 'ok' : 'bad'}">${ok ? '✓' : '✗'}</span> ${esc(c.title)}</div><div class="code">${esc(codeFor(c))}</div>`);
+          await sleep(350);
+          document.querySelectorAll('.pw-hl').forEach(e => e.classList.remove('pw-hl'));
+        }
+        const html = document.documentElement.cloneNode(true);
+        html.querySelector('#runner')?.remove();
+        const src = html.outerHTML;
+        for (const l of leaks) {
+          const ok = !new RegExp(l.pattern).test(src);
+          ok ? passed++ : failed++;
+          add(`<div class="row"><span class="${ok ? 'ok' : 'bad'}">${ok ? '✓' : '✗'}</span> ${esc(l.title)}</div><div class="code">expect(html).not.toMatch(/${esc(l.pattern.slice(0, 32))}…/)</div>`);
+          await sleep(250);
+        }
+      } catch (e) {
+        failed++;
+        add(`<div class="row bad">✗ could not load checks.json (${esc(String(e.message || e))})</div>`);
+      }
+      const secs = ((performance.now() - t0) / 1000).toFixed(1);
+      add(`<div class="sum"><span class="ok">${passed} passed</span>${failed ? ` <span class="bad">${failed} failed</span>` : ''} <span class="dim">(${secs}s)</span><br>
+        <span class="dim">same checks run in CI on every push → </span><a href="https://github.com/Tweak000/heyiamdan/actions" target="_blank" rel="noopener">github actions</a></div>`);
+      window.scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' });
+      ghost.classList.remove('on');
+      btn.disabled = false;
+    };
+  })();
+
+  // ---- for the people who open devtools ----
+  console.log('%chey, i am dan 👋', 'font: 700 22px system-ui; color: #5eead4');
+  console.log("%cYou opened devtools. You'd fit right in.\nThis page tests itself with Playwright on every push: https://github.com/Tweak000/heyiamdan",
+    'font: 13px ui-monospace, monospace; color: #8b98a8; line-height: 1.6');
 </script>
 </body>
 </html>
