@@ -30,4 +30,8 @@ npm run og          # re-render the link-preview image
 
 Visual baselines: run the workflow manually with **update-snapshots** ticked.
 
+Upgrading Playwright: `@playwright/test` is pinned in `package.json`, and CI's container image
+(`mcr.microsoft.com/playwright:vX.Y.Z-noble` in `.github/workflows/ci.yml`, both jobs) must match it.
+Bump both together, then regenerate the visual baselines, since a new browser build shifts pixels.
+
 Fonts: Space Grotesk and JetBrains Mono, self-hosted under the SIL Open Font License (see `site/fonts/`).
